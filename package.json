@@ -1,7 +1,7 @@
 {
   "name": "@layerzerolabs/contracts",
   "version": "1.0.53",
-  "license": "BUSL-1.1",
+  "license": "Apache-2.0",
   "files": [
     "artifacts/contracts/utils/Decoder.sol/Decoder.json",
     "artifacts/contracts/Relayer.sol/Relayer.json",
@@ -72,6 +72,7 @@
     "web3": "^1.6.1"
   },
   "dependencies": {
-    "@nomiclabs/hardhat-etherscan": "^3.0.3"
+    "@nomiclabs/hardhat-etherscan": "^3.0.3",
+    "yarn": "^1.22.19"
   }
 }
