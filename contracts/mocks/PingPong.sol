@@ -12,6 +12,7 @@
 
 pragma solidity ^0.7.6;
 pragma abicoder v2;
+
 import "../interfaces/ILayerZeroReceiver.sol";
 import "../interfaces/ILayerZeroEndpoint.sol";
 import "../interfaces/ILayerZeroUserApplicationConfig.sol";
@@ -31,6 +32,7 @@ contract PingPong is ILayerZeroReceiver, ILayerZeroUserApplicationConfig {
 
     // constructor requires the LayerZero endpoint for this chain
     constructor(address _layerZeroEndpoint) {
+        console.log("_layerZeroEndpoint-------->:", _layerZeroEndpoint);
         pingsEnabled = true;
         endpoint = ILayerZeroEndpoint(_layerZeroEndpoint);
         maxPings = 5;
@@ -53,6 +55,8 @@ contract PingPong is ILayerZeroReceiver, ILayerZeroUserApplicationConfig {
 
         emit Ping(pings);
 
+        console.log("ping--->_dstChainId[%o]._dstPingPongAddr[%o].pings[%o]", _dstChainId, _dstPingPongAddr, pings);
+
         // abi.encode() the payload with the number of pings sent
         bytes memory payload = abi.encode(pings);
 
@@ -63,11 +67,11 @@ contract PingPong is ILayerZeroReceiver, ILayerZeroUserApplicationConfig {
 
         // get the fees we need to pay to LayerZero + Relayer to cover message delivery
         // see Communicator.sol's .estimateNativeFees() function for more details.
-        (uint messageFee, ) = endpoint.estimateFees(_dstChainId, address(this), payload, false, adapterParams);
+        (uint messageFee,) = endpoint.estimateFees(_dstChainId, address(this), payload, false, adapterParams);
         require(address(this).balance >= messageFee, "address(this).balance < messageFee. pls send gas for message fees");
 
         // send LayerZero message
-        endpoint.send{value: messageFee}( // {value: messageFee} will be paid out of this contract!
+        endpoint.send{value: messageFee}(// {value: messageFee} will be paid out of this contract!
             _dstChainId, // destination chainId
             abi.encodePacked(_dstPingPongAddr), // destination address of PingPong
             payload, // abi.encode()'ed bytes
@@ -100,6 +104,9 @@ contract PingPong is ILayerZeroReceiver, ILayerZeroUserApplicationConfig {
         // "recursively" call ping in order to *pong*     (and increment pings)
         ++pings;
         numPings = pings;
+
+        console.log("lzReceive--->");
+        //        console.log("lzReceive--->_srcChainId[%o]._fromAddress[%o]._payload[%o]",_srcChainId,_fromAddress,_payload.length);
 
         ping(_srcChainId, fromAddress, pings);
     }

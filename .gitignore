@@ -122,3 +122,6 @@ artifacts
 deployments/localhost/
 
 transactions.md
+yarn.lock
+/deployments/
+yarn.lock

@@ -1,9 +1,11 @@
-const { getEndpointId } = require("../utils/network")
+const {getEndpointId} = require("../utils/network")
 const CONFIG = require("../constants/config.json")
 
-module.exports = async function ({ deployments, getNamedAccounts }) {
-    const { deploy } = deployments
-    const { deployer } = await getNamedAccounts()
+module.exports = async function ({deployments, getNamedAccounts}) {
+    const {deploy} = deployments
+    const {deployer} = await getNamedAccounts()
+
+    console.log("[Endpoint]deployer=", deployer)
 
     await deploy("Endpoint", {
         from: deployer,

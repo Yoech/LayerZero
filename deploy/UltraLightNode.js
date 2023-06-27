@@ -1,5 +1,5 @@
 const CONFIG = require("../constants/config.json")
-const { isTestnet } = require("../utils/network")
+const { isTestnet, getEndpointId} = require("../utils/network")
 
 function getDependencies() {
     let rtn = ["Endpoint"]
@@ -7,6 +7,7 @@ function getDependencies() {
         rtn = rtn.concat(["RelayerStaking"])
         rtn = rtn.concat(["LayerZeroOracleMock"])
         rtn = rtn.concat(["LayerZeroTokenMock"])
+        console.log("[ULN]rtn:",rtn)
     }
     return rtn
 }
@@ -16,6 +17,7 @@ module.exports = async function ({ ethers, deployments, getNamedAccounts }) {
     const { deployer } = await getNamedAccounts()
 
     const endpoint = await ethers.getContract("Endpoint")
+    console.log("[ULN]endpoint:",endpoint.address)
 
     const { address } = await deploy("UltraLightNode", {
         from: deployer,

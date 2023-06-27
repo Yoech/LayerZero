@@ -1,18 +1,23 @@
-const { isTestnet } = require("../utils/network")
+const {isTestnet} = require("../utils/network")
 
-module.exports = async function ({ deployments, getNamedAccounts }) {
-    const { deploy } = deployments
-    const { deployer } = await getNamedAccounts()
+module.exports = async function ({deployments, getNamedAccounts}) {
+    const {deploy} = deployments
+    const {deployer} = await getNamedAccounts()
+    console.log("[PingPong]deployer=", deployer)
 
     // get the Endpoint address
     const endpoint = await ethers.getContract("Endpoint")
 
-    await deploy("PingPong", {
+    console.log("[PingPong]endpoint=", endpoint.address)
+
+    let contract = await deploy("PingPong", {
         from: deployer,
         args: [endpoint.address],
         log: true,
         waitConfirmations: 1,
     })
+
+    console.log("contract=>", contract.address)
 }
 
 module.exports.skip = () =>

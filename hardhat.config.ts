@@ -12,10 +12,31 @@ import "solidity-coverage"
 import "./tasks"
 
 import {HardhatUserConfig} from "hardhat/types"
-import { accounts} from "@layerzerolabs/lz-sdk";
+import {accounts} from "@layerzerolabs/lz-sdk";
 
 const config: HardhatUserConfig = {
-  defaultNetwork: "hardhat",
+  solidity: {
+    compilers: [
+      {
+        version: "0.7.6",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 30000,
+          },
+        },
+      },
+    ],
+  },
+  paths: {
+    artifacts: "artifacts",
+    cache: "cache",
+    deploy: "deploy",
+    deployments: "deployments",
+    imports: "imports",
+    sources: "contracts",
+    tests: "test",
+  },
   gasReporter: {
     currency: "USD",
     enabled: process.env.REPORT_GAS === "true",
@@ -32,7 +53,22 @@ const config: HardhatUserConfig = {
       default: 1
     }
   },
+  spdxLicenseIdentifier: {
+    overwrite: true,
+    runOnCompile: true,
+  },
+  // defaultNetwork: "hardhat",
+  // defaultNetwork: "ganache8545",
+  defaultNetwork: "ganache8546",
   networks: {
+    ganache8545: {
+      url: "http://127.0.0.1:8545",
+      chainId: 1337,
+    },
+    ganache8546: {
+      url: "http://127.0.0.1:8546",
+      chainId: 1338,
+    },
     ethereum: {
       url: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161", // public infura endpoint
       chainId: 1,
@@ -105,40 +141,13 @@ const config: HardhatUserConfig = {
       accounts: accounts(),
     }
   },
-  paths: {
-    artifacts: "artifacts",
-    cache: "cache",
-    deploy: "deploy",
-    deployments: "deployments",
-    imports: "imports",
-    sources: "contracts",
-    tests: "test",
-  },
   // etherscan: {
   //
   //   apiKey: {
   //     mainnet: `${process.env.ETHERSCAN_API_KEY}`,
   //     rinkeby: `${process.env.ETHERSCAN_API_KEY}`,
   //   }
-  // },
-  solidity: {
-    compilers: [
-      {
-        version: "0.7.6",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 30000,
-          },
-        },
-      },
-    ],
-  },
-  spdxLicenseIdentifier: {
-    overwrite: true,
-    runOnCompile: true,
-  }
-
+  // }
 }
 
 export default config
